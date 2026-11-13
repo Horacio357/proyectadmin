@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html.light {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply antialiased selection:bg-sky-500 selection:text-white transition-colors duration-200;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+}
+
+/* Custom subtle scrollbars for light and dark */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-100 dark:bg-slate-950;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 dark:bg-slate-800 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400 dark:bg-slate-700;
+}
+
+/* Ocultar barra de scroll en contenedores táctiles manteniendo scroll fluido */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-slow {
+  animation: spin-slow 24s linear infinite;
+}
+
+/* ==========================================================================
+   ESTILOS DE IMPRESIÓN OFICIAL - CARTELERA DE CABECERA Y TALLER (A4 APAISADO)
+   ========================================================================== */
+@media print {
+  @page {
+    size: landscape;
+    margin: 6mm;
+  }
+
+  /* Ocultar elementos interactivos de pantalla */
+  nav,
+  button,
+  input,
+  select,
+  .no-print,
+  .print-hidden {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 8.5pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Forzar visibilidad del encabezado y pie de firmas */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Optimizar contraste para impresión */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    page-break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  th, td {
+    border: 1px solid #94a3b8 !important;
+    color: #0f172a !important;
+  }
+}
+
+@media screen {
+  .print-only {
+    display: none !important;
+  }
+}
+
