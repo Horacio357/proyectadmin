@@ -71,10 +71,10 @@ export const SuggestionBoxModal: React.FC<SuggestionBoxModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/45 dark:bg-slate-950/75 backdrop-blur-sm animate-backdrop">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700 rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col animate-modal-panel">
         {/* Cabecera */}
-        <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex items-center justify-between">
+        <div className="p-4 sm:p-5 border-b border-slate-200/80 dark:border-slate-800 bg-gradient-to-r from-amber-50/70 via-white to-sky-50/60 dark:from-slate-950 dark:via-slate-950 dark:to-slate-950 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-sky-600 dark:text-sky-400" />
             <h3 className="font-bold text-slate-900 dark:text-white text-sm">
@@ -204,7 +204,7 @@ export const SuggestionBoxModal: React.FC<SuggestionBoxModalProps> = ({
 
           {/* Tarjeta de Resumen de Permuta 1 a 1 */}
           {tipo === 'PERMUTA_1_A_1' && selectedCoworker && (
-            <div className="bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/60 p-3 rounded-2xl space-y-2">
+            <div className="bg-indigo-50/90 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/60 p-3.5 rounded-2xl space-y-2 animate-card-in">
               <div className="flex items-center justify-between text-xs font-bold text-indigo-800 dark:text-indigo-300">
                 <span>🔄 Canje Recíproco Pactado (Día {selectedDay})</span>
               </div>
@@ -239,7 +239,7 @@ export const SuggestionBoxModal: React.FC<SuggestionBoxModalProps> = ({
 
           {/* Motivo o Justificación */}
           <div>
-            <label className="block text-slate-600 dark:text-slate-400 font-semibold mb-1">
+            <label className="block text-slate-700 dark:text-slate-400 font-semibold mb-1.5">
               Motivo o Justificación (se enviará a Gerencia):
             </label>
             <textarea
@@ -248,22 +248,22 @@ export const SuggestionBoxModal: React.FC<SuggestionBoxModalProps> = ({
               value={motivo}
               onChange={(e) => setMotivo(e.target.value)}
               placeholder="Ej: Permuta con compañero por turno médico en hospital de Concepción..."
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-slate-800 dark:text-white placeholder-slate-400 focus:ring-1 focus:ring-sky-500"
+              className="w-full bg-slate-50/90 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-slate-800 dark:text-white placeholder-slate-400 focus:bg-white dark:focus:bg-slate-950 focus:ring-2 focus:ring-sky-500/20 focus:border-sky-400 focus:outline-none transition-all"
             />
           </div>
 
           {/* Botones */}
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+          <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200/80 dark:border-slate-800">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold"
+              className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold transition-all active:scale-95"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold transition-all shadow-md shadow-sky-600/20"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold transition-all active:scale-95 shadow-md shadow-sky-600/20"
             >
               <Send className="w-4 h-4" />
               <span>Enviar a Gerencia</span>

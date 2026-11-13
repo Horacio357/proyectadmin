@@ -54,8 +54,8 @@ const MatrixCellBase: React.FC<MatrixCellProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`relative min-w-[32px] sm:min-w-[34px] w-full h-9 flex items-center justify-center border-r border-b border-slate-200 dark:border-slate-800 select-none ${
-        isWeekend ? 'bg-slate-100/60 dark:bg-slate-900/40' : ''
+      className={`relative min-w-[32px] sm:min-w-[34px] w-full h-9 flex items-center justify-center border-r border-b border-slate-200/80 dark:border-slate-800 select-none ${
+        isWeekend ? 'bg-amber-50/35 dark:bg-slate-900/40' : ''
       }`}
     >
       <button
@@ -63,7 +63,7 @@ const MatrixCellBase: React.FC<MatrixCellProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
         title={`${shiftDef.label} (${shiftDef.timeRange})${dayAlert ? ` - [ALERTA] ${dayAlert.title}: ${dayAlert.message}` : ''}`}
-        className={`w-7 h-7 rounded-md text-xs font-bold transition-all active:scale-90 flex items-center justify-center relative border shadow-xs ${shiftDef.bgClass}`}
+        className={`w-7 h-7 rounded-lg text-xs font-bold transition-all duration-150 hover:-translate-y-px hover:shadow-xs active:scale-90 flex items-center justify-center relative border shadow-xs ${shiftDef.bgClass}`}
       >
         <span>{shift}</span>
 
@@ -82,16 +82,16 @@ const MatrixCellBase: React.FC<MatrixCellProps> = ({
         <>
           {/* Backdrop para móviles */}
           <div
-            className="fixed inset-0 z-40 bg-black/30 backdrop-blur-xs md:hidden"
+            className="fixed inset-0 z-40 bg-slate-900/35 dark:bg-slate-950/60 backdrop-blur-xs md:hidden animate-backdrop"
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="fixed bottom-4 left-4 right-4 z-50 md:absolute md:bottom-auto md:left-1/2 md:top-10 md:right-auto md:-translate-x-1/2 md:w-52 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 shadow-2xl rounded-2xl md:rounded-xl p-3 md:p-2 text-left animate-in fade-in zoom-in-95 duration-100">
+          <div className="fixed bottom-4 left-4 right-4 z-50 md:absolute md:bottom-auto md:left-1/2 md:top-10 md:right-auto md:-translate-x-1/2 md:w-52 bg-white dark:bg-slate-950 border border-slate-200/90 dark:border-slate-700 shadow-popover dark:shadow-2xl rounded-2xl md:rounded-xl p-3 md:p-2 text-left animate-popover">
             <div className="text-[11px] uppercase font-bold text-slate-500 dark:text-slate-400 mb-2 px-1 flex items-center justify-between">
               <span>Día {day} • Seleccionar Turno</span>
               <button
                 onClick={() => setIsOpen(false)}
-                className="md:hidden p-1 text-slate-400 hover:text-slate-600"
+                className="md:hidden p-1 text-slate-400 hover:text-slate-600 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -110,28 +110,28 @@ const MatrixCellBase: React.FC<MatrixCellProps> = ({
                       onUpdateShift(employeeId, day, code);
                       setIsOpen(false);
                     }}
-                    className={`flex items-center justify-between px-2.5 py-2 md:py-1.5 rounded-lg text-xs transition-colors ${
+                    className={`flex items-center justify-between px-2.5 py-2 md:py-1.5 rounded-lg text-xs transition-all duration-150 ${
                       isSelected
-                        ? 'bg-sky-600 text-white font-bold'
-                        : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200'
+                        ? 'bg-sky-600 text-white font-bold shadow-xs'
+                        : 'hover:bg-slate-100/90 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200'
                     }`}
                   >
                     <div className="flex items-center gap-2">
                       <span
-                        className={`w-5 h-5 rounded flex items-center justify-center text-[11px] font-black border ${item.badgeBg}`}
+                        className={`w-5 h-5 rounded-md flex items-center justify-center text-[11px] font-black border ${item.badgeBg}`}
                       >
                         {code}
                       </span>
                       <span className="font-semibold">{item.shortLabel}</span>
                     </div>
-                    <span className="text-[10px] opacity-75 hidden sm:inline">{item.timeRange}</span>
+                    <span className="text-[10px] opacity-75 hidden sm:inline tabular-nums">{item.timeRange}</span>
                   </button>
                 );
               })}
             </div>
 
             {dayAlert && (
-              <div className="mt-2.5 pt-2 border-t border-slate-200 dark:border-slate-800 text-[10px] text-rose-800 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 p-2 rounded-lg border border-rose-200 dark:border-rose-900/50">
+              <div className="mt-2.5 pt-2 text-[10px] text-rose-800 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 p-2 rounded-lg border border-rose-200 dark:border-rose-900/50">
                 <span className="font-bold block text-rose-700 dark:text-rose-400">{dayAlert.title}</span>
                 <span>{dayAlert.message}</span>
               </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Navbar } from './components/layout/Navbar';
 import { ShiftMatrix } from './components/matrix/ShiftMatrix';
 import { EmployeePortal } from './components/employee/EmployeePortal';
@@ -14,7 +14,7 @@ import { exportRosterToExcel } from './services/excelExport';
 import { getDaysInMonth, MONTH_NAMES } from './data/constants';
 
 export const App: React.FC = () => {
-  // Modo Día / Modo Noche
+  // Modo Día / Modo Noche (arranca en Modo Día por defecto)
   const [theme, setTheme] = useState<ThemeMode>(() => storageService.getTheme());
 
   // Período Activo del Diagrama (Año y Mes)
@@ -27,12 +27,12 @@ export const App: React.FC = () => {
       root.classList.add('dark');
       root.classList.remove('light');
       root.style.colorScheme = 'dark';
-      document.body.className = 'bg-slate-950 text-slate-100 min-h-screen overflow-x-hidden';
+      document.body.className = 'bg-slate-950 text-slate-100 min-h-screen overflow-x-hidden transition-colors duration-300';
     } else {
       root.classList.remove('dark');
       root.classList.add('light');
       root.style.colorScheme = 'light';
-      document.body.className = 'bg-slate-100 text-slate-900 min-h-screen overflow-x-hidden';
+      document.body.className = 'bg-[#f4f7fb] text-slate-900 min-h-screen overflow-x-hidden transition-colors duration-300';
     }
     storageService.saveTheme(theme);
   }, [theme]);
@@ -81,6 +81,7 @@ export const App: React.FC = () => {
   const [isAIOptimizerOpen, setIsAIOptimizerOpen] = useState(false);
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const [toastNotification, setToastNotification] = useState<string | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
 
   // Cada vez que cambie de rol, sincronizar pestaña por defecto
   useEffect(() => {
@@ -90,9 +91,13 @@ export const App: React.FC = () => {
   }, [currentUser]);
 
   const showToast = (msg: string) => {
+    if (toastTimerRef.current) {
+      window.clearTimeout(toastTimerRef.current);
+    }
     setToastNotification(msg);
-    setTimeout(() => {
+    toastTimerRef.current = window.setTimeout(() => {
       setToastNotification(null);
+      toastTimerRef.current = null;
     }, 3500);
   };
 
@@ -350,7 +355,7 @@ export const App: React.FC = () => {
   ).length;
 
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col transition-colors duration-200 w-full overflow-x-hidden">
+    <div className="min-h-screen bg-[#f4f7fb] bg-[radial-gradient(ellipse_90%_45%_at_50%_-10%,rgba(14,165,233,0.08),transparent)] dark:bg-slate-950 dark:bg-none text-slate-900 dark:text-slate-100 flex flex-col transition-colors duration-300 w-full overflow-x-hidden">
       {/* Barra de Navegación Principal */}
       <Navbar
         currentUser={currentUser}
@@ -378,61 +383,64 @@ export const App: React.FC = () => {
 
       {/* Notificación Toast flotante */}
       {toastNotification && (
-        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 dark:bg-sky-600 text-white font-semibold text-xs px-4 py-2.5 rounded-2xl shadow-xl border border-slate-700 dark:border-sky-400/40 animate-in fade-in slide-in-from-bottom-3 duration-200">
-          {toastNotification}
+        <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:bottom-6 sm:right-6 max-w-md z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-800 dark:text-sky-100 font-semibold text-xs px-4 py-3 rounded-2xl shadow-popover dark:shadow-xl border border-sky-200/90 dark:border-sky-500/40 flex items-center gap-2.5 animate-toast-in">
+          <span className="w-2 h-2 rounded-full bg-sky-500 flex-shrink-0 animate-pulse" />
+          <span>{toastNotification}</span>
         </div>
       )}
 
       {/* Contenido Principal según Pestaña Activa */}
       <main className="flex-1 max-w-[1920px] w-full mx-auto p-3 sm:p-5 lg:p-6 xl:p-8">
-        {activeTab === 'matrix' && (
-          <ShiftMatrix
-            roster={roster}
-            employees={employees}
-            requirements={requirements}
-            onUpdateShift={handleUpdateShift}
-            onBulkUpdate={handleBulkUpdate}
-            onOpenAIOptimizer={() => setIsAIOptimizerOpen(true)}
-            onExportExcel={handleExportExcel}
-          />
-        )}
+        <div key={activeTab} className="animate-tab-enter">
+          {activeTab === 'matrix' && (
+            <ShiftMatrix
+              roster={roster}
+              employees={employees}
+              requirements={requirements}
+              onUpdateShift={handleUpdateShift}
+              onBulkUpdate={handleBulkUpdate}
+              onOpenAIOptimizer={() => setIsAIOptimizerOpen(true)}
+              onExportExcel={handleExportExcel}
+            />
+          )}
 
-        {activeTab === 'portal' && (
-          <EmployeePortal
-            currentUser={currentUser}
-            employees={employees}
-            roster={roster}
-            suggestions={suggestions}
-            onSubmitRequest={handleSubmitRequest}
-          />
-        )}
+          {activeTab === 'portal' && (
+            <EmployeePortal
+              currentUser={currentUser}
+              employees={employees}
+              roster={roster}
+              suggestions={suggestions}
+              onSubmitRequest={handleSubmitRequest}
+            />
+          )}
 
-        {activeTab === 'requests' && (
-          <RequestsManager
-            suggestions={suggestions}
-            onApproveRequest={handleApproveRequest}
-            onRejectRequest={handleRejectRequest}
-            roster={roster}
-          />
-        )}
+          {activeTab === 'requests' && (
+            <RequestsManager
+              suggestions={suggestions}
+              onApproveRequest={handleApproveRequest}
+              onRejectRequest={handleRejectRequest}
+              roster={roster}
+            />
+          )}
 
-        {activeTab === 'audit' && (
-          <LegalAuditPanel
-            auditSummary={auditSummary}
-            roster={roster}
-            onOpenAIOptimizer={() => setIsAIOptimizerOpen(true)}
-          />
-        )}
+          {activeTab === 'audit' && (
+            <LegalAuditPanel
+              auditSummary={auditSummary}
+              roster={roster}
+              onOpenAIOptimizer={() => setIsAIOptimizerOpen(true)}
+            />
+          )}
 
-        {activeTab === 'staff' && (
-          <StaffManager
-            employees={employees}
-            onUpdateEmployee={handleUpdateEmployee}
-            onAddEmployee={handleAddEmployee}
-            onApproveProfile={handleApproveProfile}
-            onDenyProfile={handleDenyProfile}
-          />
-        )}
+          {activeTab === 'staff' && (
+            <StaffManager
+              employees={employees}
+              onUpdateEmployee={handleUpdateEmployee}
+              onAddEmployee={handleAddEmployee}
+              onApproveProfile={handleApproveProfile}
+              onDenyProfile={handleDenyProfile}
+            />
+          )}
+        </div>
       </main>
 
       {/* Modal de Optimización con IA */}

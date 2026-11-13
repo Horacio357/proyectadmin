@@ -36,22 +36,24 @@ export const RequestsManager: React.FC<RequestsManagerProps> = ({
   return (
     <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6">
       {/* Cabecera y Filtros */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 sm:p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-gradient-to-br from-white via-white to-amber-50/50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-4 sm:p-6 shadow-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-            <MessageSquare className="w-5 h-5 text-amber-500" />
+          <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2 tracking-tight">
+            <span className="p-2 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200/80 dark:border-amber-500/20">
+              <MessageSquare className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+            </span>
             <span>Buzón de Solicitudes y Cambios de Turno</span>
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5">
             Revisión gerencial de pedidos del personal operativo con impacto automático e inmediato en la matriz
           </p>
         </div>
 
         {/* Filtros de Estado */}
-        <div className="flex items-center bg-slate-100 dark:bg-slate-950 p-1 rounded-xl border border-slate-200 dark:border-slate-800 text-xs self-start sm:self-auto">
+        <div className="flex flex-wrap items-center bg-slate-100/90 dark:bg-slate-950 p-1 rounded-xl border border-slate-200/80 dark:border-slate-800 text-xs self-start sm:self-auto">
           <button
             onClick={() => setFilterStatus('TODAS')}
-            className={`px-2.5 py-1 rounded-lg font-semibold transition-colors ${
+            className={`px-2.5 py-1.5 rounded-lg font-semibold transition-all duration-200 active:scale-95 tabular-nums ${
               filterStatus === 'TODAS' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs' : 'text-slate-500 hover:text-slate-900'
             }`}
           >
@@ -59,7 +61,7 @@ export const RequestsManager: React.FC<RequestsManagerProps> = ({
           </button>
           <button
             onClick={() => setFilterStatus('PENDIENTE')}
-            className={`px-2.5 py-1 rounded-lg font-semibold transition-colors ${
+            className={`px-2.5 py-1.5 rounded-lg font-semibold transition-all duration-200 active:scale-95 tabular-nums ${
               filterStatus === 'PENDIENTE'
                 ? 'bg-amber-600 text-white shadow-xs'
                 : 'text-slate-500 hover:text-slate-900'
@@ -69,7 +71,7 @@ export const RequestsManager: React.FC<RequestsManagerProps> = ({
           </button>
           <button
             onClick={() => setFilterStatus('APROBADA')}
-            className={`px-2.5 py-1 rounded-lg font-semibold transition-colors ${
+            className={`px-2.5 py-1.5 rounded-lg font-semibold transition-all duration-200 active:scale-95 tabular-nums ${
               filterStatus === 'APROBADA'
                 ? 'bg-emerald-600 text-white shadow-xs'
                 : 'text-slate-500 hover:text-slate-900'
@@ -79,7 +81,7 @@ export const RequestsManager: React.FC<RequestsManagerProps> = ({
           </button>
           <button
             onClick={() => setFilterStatus('RECHAZADA')}
-            className={`px-2.5 py-1 rounded-lg font-semibold transition-colors ${
+            className={`px-2.5 py-1.5 rounded-lg font-semibold transition-all duration-200 active:scale-95 ${
               filterStatus === 'RECHAZADA'
                 ? 'bg-rose-600 text-white shadow-xs'
                 : 'text-slate-500 hover:text-slate-900'
@@ -93,7 +95,7 @@ export const RequestsManager: React.FC<RequestsManagerProps> = ({
       {/* Lista de Solicitudes */}
       <div className="space-y-3">
         {filtered.length === 0 ? (
-          <div className="p-12 text-center text-slate-500 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl text-sm">
+          <div className="p-12 text-center text-slate-500 bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl text-sm shadow-card">
             No se encontraron solicitudes con el filtro seleccionado.
           </div>
         ) : (
@@ -105,34 +107,34 @@ export const RequestsManager: React.FC<RequestsManagerProps> = ({
             return (
               <div
                 key={sug.id}
-                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs"
+                className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs"
               >
                 {/* Info Empleado & Puesto */}
                 <div className="space-y-2 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="font-bold text-slate-900 dark:text-white text-sm">{sug.usuarioNombre}</span>
-                    <span className={`px-2 py-0.5 rounded text-[11px] font-bold ${posConfig.badgeClass}`}>
+                    <span className={`px-2 py-0.5 rounded-md text-[11px] font-bold ${posConfig.badgeClass}`}>
                       {posConfig.label}
                     </span>
                     {sug.tipo === 'PERMUTA_1_A_1' && (
-                      <span className="px-2 py-0.5 rounded text-[11px] font-extrabold bg-indigo-100 dark:bg-indigo-900/60 text-indigo-800 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700">
+                      <span className="px-2 py-0.5 rounded-md text-[11px] font-extrabold bg-indigo-50 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700">
                         🔄 Permuta 1 a 1
                       </span>
                     )}
-                    <span className="text-slate-400">•</span>
-                    <span className="text-slate-500">
+                    <span className="text-slate-300 dark:text-slate-600">•</span>
+                    <span className="text-slate-500 tabular-nums">
                       Fecha: {new Date(sug.fechaCreacion).toLocaleDateString('es-AR')}
                     </span>
                   </div>
 
                   {/* Detalle del cambio */}
                   {sug.tipo === 'PERMUTA_1_A_1' ? (
-                    <div className="bg-indigo-50/70 dark:bg-indigo-950/40 p-2.5 rounded-xl border border-indigo-200 dark:border-indigo-800/80 space-y-1.5">
+                    <div className="bg-indigo-50/70 dark:bg-indigo-950/40 p-3 rounded-xl border border-indigo-200/80 dark:border-indigo-800/80 space-y-1.5">
                       <div className="flex flex-wrap items-center gap-2 text-xs">
                         <span className="font-bold text-indigo-900 dark:text-indigo-200">
                           Canje pactado Día {sug.dia}:
                         </span>
-                        <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg border border-indigo-200 dark:border-indigo-900 font-semibold">
+                        <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg border border-indigo-200/80 dark:border-indigo-900 font-semibold shadow-xs">
                           <span className="text-slate-700 dark:text-slate-300">{sug.usuarioNombre}</span>
                           <span className="text-slate-500 font-normal">({sug.turnoActual})</span>
                           <span className="text-indigo-600 dark:text-indigo-400 font-black">⇄</span>
@@ -145,11 +147,11 @@ export const RequestsManager: React.FC<RequestsManagerProps> = ({
                       </p>
                     </div>
                   ) : (
-                    <div className="flex flex-wrap items-center gap-2 bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800/80">
-                      <span className="font-semibold text-slate-700 dark:text-slate-300">
+                    <div className="flex flex-wrap items-center gap-2 bg-slate-50/90 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-800/80">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300 tabular-nums">
                         Día solicitado: <span className="text-slate-900 dark:text-white font-bold">{sug.dia}</span>
                       </span>
-                      <span className="text-slate-400">|</span>
+                      <span className="text-slate-300 dark:text-slate-600">|</span>
                       <span className="text-slate-500">
                         Turno actual:{' '}
                         <span className="text-slate-700 dark:text-slate-200 font-bold">
@@ -167,7 +169,7 @@ export const RequestsManager: React.FC<RequestsManagerProps> = ({
                     </div>
                   )}
 
-                  <p className="text-slate-600 dark:text-slate-300 italic bg-slate-50/70 dark:bg-slate-950/50 p-2 rounded-lg border border-slate-200 dark:border-slate-800/50">
+                  <p className="text-slate-600 dark:text-slate-300 italic bg-slate-50/80 dark:bg-slate-950/50 p-2.5 rounded-xl border border-slate-200/70 dark:border-slate-800/50">
                     "{sug.motivo}"
                   </p>
                 </div>
@@ -178,7 +180,7 @@ export const RequestsManager: React.FC<RequestsManagerProps> = ({
                     <>
                       <button
                         onClick={() => onApproveRequest(sug.id)}
-                        className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all shadow-md shadow-emerald-700/20 active:scale-95"
+                        className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all duration-200 shadow-md shadow-emerald-600/20 hover:-translate-y-px active:scale-95"
                       >
                         <CheckCircle2 className="w-4 h-4" />
                         <span>Aprobar & Aplicar</span>
@@ -186,7 +188,7 @@ export const RequestsManager: React.FC<RequestsManagerProps> = ({
 
                       <button
                         onClick={() => onRejectRequest(sug.id)}
-                        className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-rose-50 dark:bg-slate-800 dark:hover:bg-rose-950/40 text-slate-700 hover:text-rose-600 dark:text-slate-300 dark:hover:text-rose-400 border border-slate-200 dark:border-slate-700 transition-colors"
+                        className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white hover:bg-rose-50 dark:bg-slate-800 dark:hover:bg-rose-950/40 text-slate-700 hover:text-rose-600 dark:text-slate-300 dark:hover:text-rose-400 border border-slate-200/90 dark:border-slate-700 shadow-xs transition-all duration-150 active:scale-95"
                       >
                         <XCircle className="w-4 h-4" />
                         <span>Rechazar</span>

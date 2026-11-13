@@ -15,7 +15,7 @@ const STORAGE_KEYS = {
   REQUIREMENTS: 'turnosmart_requirements_v1',
   API_KEY: 'turnosmart_gemini_key_v1',
   CURRENT_USER_ID: 'turnosmart_current_user_id_v1',
-  THEME: 'turnosmart_theme_v1',
+  THEME: 'turnosmart_theme_v2',
 };
 
 export const storageService = {
@@ -24,11 +24,8 @@ export const storageService = {
     if (raw === 'light' || raw === 'dark') {
       return raw;
     }
-    // Si no está configurado, detectar preferencia del sistema
-    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-      return 'light';
-    }
-    return 'dark'; // Dark mode por defecto para estilo corporativo moderno
+    // Modo Día por defecto al iniciar la aplicación; luego el usuario puede cambiar manualmente a Modo Noche
+    return 'light';
   },
 
   saveTheme(theme: ThemeMode): void {
